@@ -1,0 +1,34 @@
+[project]
+name = "prismarine"
+version = "1.0.0"
+description = "Pythonic DynamoDB ORM"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "boto3>=1.38.19",
+    "case-converter>=1.2.0",
+    "click>=8.2.0",
+    "gray-formatter>=3.0.10",
+    "mako>=1.3.10",
+    "types-boto3[dynamodb]>=1.38.19",
+]
+
+[project.urls]
+Homepage = "https://github.com/adsight-app/prismarine"
+Changelog = "https://github.com/adsight-app/prismarine/blob/main/CHANGELOG.md"
+
+[project.scripts]
+prismarine = "prismarine.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/prismarine"]
+
+[dependency-groups]
+dev = [
+    "pip>=25.1.1",
+    "twine>=6.1.0",
+]
