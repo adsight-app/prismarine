@@ -38,7 +38,7 @@ dynamo = get_dynamo_access()
 '''
 
 
-def build_client(cluster, base_dir: Path, runtime: str, access_module: str):
+def build_client(cluster, base_dir: Path, runtime: str, access_module: str | None):
     r_base_dir = base_dir.resolve()
     this_dir = Path(__file__).resolve().parent
     template_file = Path(this_dir, 'model.mako')
@@ -79,6 +79,7 @@ def build_client(cluster, base_dir: Path, runtime: str, access_module: str):
             )
         )
 
+    access_module = access_module or 'prismarine.runtime.dynamo_default'
     header = HEADER.format(access_module=access_module)
 
     runtime_prefix = f'{runtime}.' if runtime else ''

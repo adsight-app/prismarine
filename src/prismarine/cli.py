@@ -25,7 +25,6 @@ from prismarine.prisma_client import generate_client
     '--dynamo-access-module', required=False,
     help='''
 Dynamo access module to use in runtime. If not provided, DefaultDynamoAccess access class from prismarine.runtime.dynamo_default will be used''',
-    default='prismarine.runtime.dynamo_default'
 )
 @click.option(
     '--verbose', is_flag=True, help='Enable verbose logging'
