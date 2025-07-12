@@ -189,3 +189,13 @@ class TeamModel(Model):
         def get(*, bar: str, foo: str) -> Team:
             ...
 ```
+
+### `export` Decorator
+
+The `Cluster.export` decorator is used to define a class that is not a model, but is exported from the cluster. It accepts a class as an argument. It is required to used on all classes that serve as types for model elements.
+
+```python
+@c.export
+class Team(TypedDict):
+    Foo: str
+    Bar: str

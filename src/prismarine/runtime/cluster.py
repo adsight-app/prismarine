@@ -1,10 +1,12 @@
 class Cluster:
     prefix: str
     models: dict[str, dict]
+    exports: dict[str, dict]
 
     def __init__(self, prefix=''):
         self.prefix = prefix
         self.models = {}
+        self.exports = {}
 
     def model(
         self,
@@ -38,3 +40,7 @@ class Cluster:
             return cls
 
         return decorator
+
+    def export(self, cls):
+        self.exports[cls.__name__] = {'cls': cls, 'class_name': cls.__name__}
+        return cls

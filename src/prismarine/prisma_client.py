@@ -50,7 +50,7 @@ def build_client(cluster, base_dir: Path, runtime: str, access_module: str | Non
         file_path = Path(inspect.getfile(model['cls']))
         relative_arr = file_path.relative_to(r_base_dir).as_posix().split('/')
         relative_arr[-1] = relative_arr[-1].replace('.py', '')
-        imports.add(('.'.join(relative_arr), name))
+        imports.add(('.'.join(relative_arr), model['class_name']))
         source = inspect.getsource(model['cls'])
         source = re.sub(r'@.+?\n', '', source)
 
@@ -78,6 +78,13 @@ def build_client(cluster, base_dir: Path, runtime: str, access_module: str | Non
                 DtoLines=source.split('\n')
             )
         )
+
+    # Additional exported classes (but not models)
+    for export in cluster.exports.values():
+        file_path = Path(inspect.getfile(export['cls']))
+        relative_arr = file_path.relative_to(r_base_dir).as_posix().split('/')
+        relative_arr[-1] = relative_arr[-1].replace('.py', '')
+        imports.add(('.'.join(relative_arr), export['class_name']))
 
     access_module = access_module or 'prismarine.runtime.dynamo_default'
     header = HEADER.format(access_module=access_module)
