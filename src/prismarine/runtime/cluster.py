@@ -1,10 +1,10 @@
 class Cluster:
     prefix: str
-
-    models = {}
+    models: dict[str, dict]
 
     def __init__(self, prefix=''):
         self.prefix = prefix
+        self.models = {}
 
     def model(
         self,

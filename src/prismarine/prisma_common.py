@@ -25,8 +25,10 @@ def get_cluster(base_dir: Path, cluster_package: str):
 
     for name in dir(models):
         obj = getattr(models, name)
+
         if isinstance(obj, models.Cluster):
             lg.info(f'Cluster found: {obj.prefix}')
+            lg.debug(f'Cluster models: {obj.models}')
             return obj
 
     raise UserWarning('Cluster not found')
