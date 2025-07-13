@@ -2,6 +2,7 @@
 
 - Added `prismarine version` command to print the version of Prismarine
 - Changed `generate-client` command syntax to be more consistent with other commands
+- Ensured deterministic generation of client code
 
 # 1.1.0
 
