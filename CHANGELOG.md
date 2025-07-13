@@ -1,7 +1,7 @@
-# 1.1.1
+# 1.2.0
 
-- Ensured deterministic client generation
-- Added --info option to print information about the Prismarine package
+- Added `prismarine version` command to print the version of Prismarine
+- Changed `generate-client` command syntax to be more consistent with other commands
 
 # 1.1.0
 

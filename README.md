@@ -49,7 +49,7 @@ class Team(TypedDict):
 If we place this code in `<base-path>/<package-name>/models.py` and the following command is run, it will generate a `prismarine_client.py` file in the same directory:
 
 ```pwsh
-python .\tools\prismarine\cli.py --base <base-path> generate-client <package-name>
+uv run prismarine generate-client --base <base-path> <package-name>
 ```
 
 The `prismarine_client.py` file will contain the following code:
@@ -199,15 +199,14 @@ The `Cluster.export` decorator is used to define a class that is not a model, bu
 class Team(TypedDict):
     Foo: str
     Bar: str
-
-## Information Mode
-
-You can print information about the Prismarine package by running the following command:
-
-```pwsh
-python .\tools\prismarine\cli.py --info
 ```
 
-Available information:
+## Other Commands
 
-- Prismarine version (`--info version`)
+### `version`
+
+Prints the version of Prismarine.
+
+```pwsh
+uv run prismarine version
+```

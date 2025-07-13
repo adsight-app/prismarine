@@ -1,7 +1,8 @@
 $cmd = @(
     'uv run prismarine',
+    'generate-client',
     '--base .\example\myapp\',
-    'generate-client myobject'
+    'myobject'
 )
 
 Invoke-Expression $($cmd -join ' ')
