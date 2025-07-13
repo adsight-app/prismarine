@@ -199,3 +199,15 @@ The `Cluster.export` decorator is used to define a class that is not a model, bu
 class Team(TypedDict):
     Foo: str
     Bar: str
+
+## Information Mode
+
+You can print information about the Prismarine package by running the following command:
+
+```pwsh
+python .\tools\prismarine\cli.py --info
+```
+
+Available information:
+
+- Prismarine version (`--info version`)
