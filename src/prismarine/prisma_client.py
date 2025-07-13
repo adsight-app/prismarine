@@ -46,7 +46,7 @@ def build_client(cluster, base_dir: Path, runtime: str, access_module: str | Non
     module_body = ''
     imports = set()
 
-    for name, model in cluster.models.items():
+    for name, model in sorted(cluster.models.items(), key=lambda x: x[0]):
         file_path = Path(inspect.getfile(model['cls']))
         relative_arr = file_path.relative_to(r_base_dir).as_posix().split('/')
         relative_arr[-1] = relative_arr[-1].replace('.py', '')
@@ -72,7 +72,8 @@ def build_client(cluster, base_dir: Path, runtime: str, access_module: str | Non
                         'PartitionKey': index['PK'],
                         'SortKey': index['SK']
                     }
-                    for index_name, index in model['indexes'].items()
+                    for index_name, index
+                    in sorted(model['indexes'].items(), key=lambda x: x[0])
                 ],
                 TableName=model['table'],
                 DtoLines=source.split('\n')
@@ -91,7 +92,7 @@ def build_client(cluster, base_dir: Path, runtime: str, access_module: str | Non
 
     runtime_prefix = f'{runtime}.' if runtime else ''
 
-    for i in imports:
+    for i in sorted(imports, key=lambda x: x[0]):
         header += f'from {runtime_prefix}{i[0]} import {i[1]}\n'
 
     content = header + DYNAMO_ACCESS + module_body
