@@ -48,8 +48,8 @@ class Team(TypedDict):
 
 If we place this code in `<base-path>/<package-name>/models.py` and the following command is run, it will generate a `prismarine_client.py` file in the same directory:
 
-```pwsh
-uv run prismarine generate-client --base <base-path> <package-name>
+```bash
+prismarine generate-client --base <base-path> <package-name>
 ```
 
 The `prismarine_client.py` file will contain the following code:
@@ -207,6 +207,6 @@ class Team(TypedDict):
 
 Prints the version of Prismarine.
 
-```pwsh
-uv run prismarine version
+```bash
+prismarine version
 ```
