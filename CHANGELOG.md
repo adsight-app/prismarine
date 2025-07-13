@@ -1,3 +1,7 @@
+# 1.3.0
+
+- TBD
+
 # 1.2.0
 
 - Added `prismarine version` command to print the version of Prismarine

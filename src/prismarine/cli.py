@@ -41,15 +41,23 @@ def prismarine(ctx, path, verbose):
     help='''
 Dynamo access module to use in runtime. If not provided, DefaultDynamoAccess access class from prismarine.runtime.dynamo_default will be used'''
 )
+@click.option(
+    '--extra-imports', required=False, multiple=True,
+    help='Extra imports to add to the client in format: path.to.module:ClassName'
+)
 @click.argument('cluster_package')
-def generate_client_cmd(base, runtime, dynamo_access_module, cluster_package):
+def generate_client_cmd(base, runtime, dynamo_access_module, cluster_package, extra_imports):
     base_dir = Path(base)
+
+    if extra_imports:
+        extra_imports = [i.split(':') for i in extra_imports]
 
     generate_client(
         base_dir,
         cluster_package,
-        runtime,
-        dynamo_access_module
+        runtime=runtime,
+        access_module=dynamo_access_module,
+        extra_imports=extra_imports
     )
 
 
