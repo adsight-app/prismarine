@@ -1,6 +1,6 @@
 # 1.3.0
 
-- TBD
+- Added `extra-imports` option to `generate-client` command
 
 # 1.2.0
 
