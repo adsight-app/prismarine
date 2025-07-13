@@ -95,7 +95,7 @@ def build_client(cluster, base_dir: Path, runtime: str | None, access_module: st
 
     runtime_prefix = f'{runtime}.' if runtime else ''
 
-    for i in sorted(imports, key=lambda x: x[0]):
+    for i in sorted(imports, key=lambda x: x[1]):
         header += f'from {runtime_prefix}{i[0]} import {i[1]}\n'
 
     content = header + DYNAMO_ACCESS + module_body
