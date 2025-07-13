@@ -2,7 +2,6 @@ import re
 from pathlib import Path
 import logging as lg
 
-import click
 from mako.template import Template
 from caseconverter import snakecase, pascalcase
 import inspect
@@ -38,7 +37,7 @@ dynamo = get_dynamo_access()
 '''
 
 
-def build_client(cluster, base_dir: Path, runtime: str, access_module: str | None):
+def build_client(cluster, base_dir: Path, runtime: str | None, access_module: str | None):
     r_base_dir = base_dir.resolve()
     this_dir = Path(__file__).resolve().parent
     template_file = Path(this_dir, 'model.mako')
@@ -106,14 +105,25 @@ def write_client(content, base_dir: Path, cluster_package: str):
     client_path.write_text(content)
 
 
-@click.command()
-@click.pass_obj
-@click.argument('cluster_package')
-def generate_client(obj, cluster_package):
-    cluster = get_cluster(obj['BaseDir'], cluster_package)
+def generate_client(
+    base_dir: Path,
+    cluster_package: str,
+    runtime: str | None,
+    access_module: str | None
+):
+    '''
+    Generate a Prismarine client for a given cluster package.
+
+    Args:
+        base_dir: The base directory of the project.
+        cluster_package: The name of the cluster package.
+        runtime: The runtime package where the models are defined.
+        access_module: The database access module to use.
+    '''
+    cluster = get_cluster(base_dir, cluster_package)
 
     content = build_client(
-        cluster, obj['BaseDir'], obj['Runtime'], obj['DynamoAccessModule']
+        cluster, base_dir, runtime, access_module
     )
 
-    write_client(content, obj['BaseDir'], cluster_package)
+    write_client(content, base_dir, cluster_package)
