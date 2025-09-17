@@ -1,3 +1,7 @@
+# 1.3.1
+
+- Fixed json load encoding issue
+
 # 1.3.0
 
 - Added `extra-imports` option to `generate-client` command

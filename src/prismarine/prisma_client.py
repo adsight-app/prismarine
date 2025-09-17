@@ -60,7 +60,7 @@ def build_client(
     r_base_dir = base_dir.resolve()
     this_dir = Path(__file__).resolve().parent
     template_file = Path(this_dir, 'model.mako')
-    model_template = Template(template_file.read_text())
+    model_template = Template(template_file.read_text(encoding='utf-8'))
     module_body = ''
     imports = set()
 
