@@ -15,16 +15,23 @@ class Cluster:
         SK: str | None = None,
         table: str | None = None,
         name: str | None = None,
-        alias: str | None = None
+        alias: str | None = None,
+        trigger: str | dict | None = None
     ):
         def decorator(cls):
-            self.models[name or cls.__name__] = {
+            model_data = {
                 'cls': cls,
                 'main': {'PK': PK, 'SK': SK},
                 'table': table or self.prefix + (name or cls.__name__),
                 'indexes': {},
                 'class_name': cls.__name__
             }
+
+            # Add trigger if specified
+            if trigger:
+                model_data['trigger'] = trigger
+
+            self.models[name or cls.__name__] = model_data
             return cls
 
         return decorator

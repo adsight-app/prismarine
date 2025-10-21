@@ -149,7 +149,51 @@ You may notice that Prismarine mostly requires named arguments. This ensures tha
 
 ### `model` Decorator
 
-Aside from the `PK` and `SK` arguments, the `Cluster.model` decorator also accepts `table` and `name` arguments. `table` sets a full custom table name, while `name` sets a custom model name. For example, if the `Cluster` has a prefix `TapgameExample`, by default the `Team` model will have the table name `TapgameExampleTeam`. If we set `name='Custom'`, the table name will be `TapgameExampleCustom`. And if we set `table='CustomTable'`, the table name will simply be `CustomTable`, without the prefix.
+The `Cluster.model` decorator accepts several arguments to customize the model:
+
+- **`PK`** (required): The name of the partition key attribute
+- **`SK`** (optional): The name of the sort key attribute
+- **`table`** (optional): Sets a full custom table name (without prefix)
+- **`name`** (optional): Sets a custom model name (used with prefix)
+- **`trigger`** (optional): Configures a DynamoDB stream trigger for the table (when using with EasySAM)
+
+For example, if the `Cluster` has a prefix `TapgameExample`, by default the `Team` model will have the table name `TapgameExampleTeam`. If we set `name='Custom'`, the table name will be `TapgameExampleCustom`. And if we set `table='CustomTable'`, the table name will simply be `CustomTable`, without the prefix.
+
+#### DynamoDB Stream Triggers
+
+When using Prismarine with [EasySAM](https://github.com/adsight-app/easysam), you can configure DynamoDB stream triggers directly on your models using the `trigger` parameter. This allows a Lambda function to be automatically invoked whenever items in the table are inserted, modified, or removed.
+
+**Simple trigger (string format):**
+```python
+@c.model(PK='Foo', SK='Bar', trigger='itemlogger')
+class Item(TypedDict):
+    Foo: str
+    Bar: str
+```
+
+**Advanced trigger configuration (dict format):**
+```python
+@c.model(
+    PK='OrderID',
+    trigger={
+        'function': 'orderprocessor',      # Lambda function name
+        'viewtype': 'new-and-old',         # keys-only, new, old, or new-and-old
+        'batchsize': 50,                    # Number of records per batch
+        'batchwindow': 10,                  # Seconds to wait for batch
+        'startingposition': 'trim-horizon'  # trim-horizon or latest
+    }
+)
+class Order(TypedDict):
+    OrderID: str
+    Total: float
+```
+
+When EasySAM generates the CloudFormation template, it will automatically:
+- Enable DynamoDB Streams on the table
+- Create an EventSourceMapping to connect the stream to your Lambda function
+- Configure the appropriate IAM permissions for stream access
+
+The trigger Lambda function will receive DynamoDB stream events with information about inserted, modified, or removed items.
 
 ### `index` Decorator
 
