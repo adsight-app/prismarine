@@ -149,7 +149,52 @@ You may notice that Prismarine mostly requires named arguments. This ensures tha
 
 ### `model` Decorator
 
-Aside from the `PK` and `SK` arguments, the `Cluster.model` decorator also accepts `table` and `name` arguments. `table` sets a full custom table name, while `name` sets a custom model name. For example, if the `Cluster` has a prefix `TapgameExample`, by default the `Team` model will have the table name `TapgameExampleTeam`. If we set `name='Custom'`, the table name will be `TapgameExampleCustom`. And if we set `table='CustomTable'`, the table name will simply be `CustomTable`, without the prefix.
+Aside from the `PK` and `SK` arguments, the `Cluster.model` decorator also accepts `table`, `name`, and `trigger` arguments. `table` sets a full custom table name, while `name` sets a custom model name. For example, if the `Cluster` has a prefix `TapgameExample`, by default the `Team` model will have the table name `TapgameExampleTeam`. If we set `name='Custom'`, the table name will be `TapgameExampleCustom`. And if we set `table='CustomTable'`, the table name will simply be `CustomTable`, without the prefix.
+
+#### Using TriggerConfig
+
+The `trigger` parameter allows you to configure a Lambda function to be triggered on table changes (via DynamoDB Streams) when deployed with [EasySAM](https://github.com/adsight-app/easysam).
+
+**Simple form** (just function name, uses defaults):
+
+```python
+@c.model(PK='Foo', SK='Bar', trigger='my-lambda')
+class Item(TypedDict):
+    Foo: str
+    Bar: str
+```
+
+**Advanced form** (with options):
+
+```python
+@c.model(
+    PK='Foo',
+    SK='Bar',
+    trigger={
+        'function': 'my-lambda',
+        'viewtype': 'new-and-old',  # Optional: keys-only, new, old, new-and-old (default: new-and-old)
+        'batchsize': 10,             # Optional: number of records per batch
+        'batchwindow': 5,            # Optional: seconds to wait for batch
+        'startingposition': 'latest' # Optional: trim-horizon, latest (default: latest)
+    }
+)
+class Item(TypedDict):
+    Foo: str
+    Bar: str
+```
+
+The trigger configuration options:
+- **function**: The name of the Lambda function to trigger
+- **viewtype**: What data to include in the stream record (default: `new-and-old`)
+  - `keys-only`: Only the keys of the modified item
+  - `new`: Only the new item image
+  - `old`: Only the old item image
+  - `new-and-old`: Both old and new item images
+- **batchsize**: Number of records to process per batch (improves throughput)
+- **batchwindow**: Maximum number of seconds to wait for a batch (reduces latency)
+- **startingposition**: Where to start reading the stream (default: `latest`)
+  - `trim-horizon`: Start from the oldest record available
+  - `latest`: Start from the most recent record
 
 ### `index` Decorator
 

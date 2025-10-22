@@ -1,3 +1,7 @@
+# 1.4.0
+
+- Added support for DynamoDB Streams/Triggers
+
 # 1.3.1
 
 - Fixed json load encoding issue
