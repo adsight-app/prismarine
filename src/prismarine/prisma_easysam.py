@@ -53,4 +53,8 @@ def build_dynamo_tables(prefix, cluster):
         if indices:
             result[short_name]['indices'] = indices
 
+        # Add trigger if present in model
+        if 'trigger' in data:
+            result[short_name]['trigger'] = data['trigger']
+
     return result
