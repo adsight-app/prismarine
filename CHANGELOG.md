@@ -1,4 +1,4 @@
-# 1.4.0
+# 1.4.1
 
 - Added support for DynamoDB Streams/Triggers
 
