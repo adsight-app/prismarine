@@ -1,3 +1,15 @@
+from typing import TypedDict, NotRequired, Literal
+
+
+class TriggerConfig(TypedDict):
+    '''DynamoDB Stream Trigger Configuration for EasySAM'''
+    function: str
+    viewtype: NotRequired[Literal['keys-only', 'new', 'old', 'new-and-old']]
+    batchsize: NotRequired[int]
+    batchwindow: NotRequired[int]
+    startingposition: NotRequired[Literal['trim-horizon', 'latest']]
+
+
 class Cluster:
     prefix: str
     models: dict[str, dict]
@@ -16,7 +28,7 @@ class Cluster:
         table: str | None = None,
         name: str | None = None,
         alias: str | None = None,
-        trigger: str | dict | None = None
+        trigger: str | TriggerConfig | None = None
     ):
         def decorator(cls):
             model_data = {
