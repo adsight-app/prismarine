@@ -64,7 +64,8 @@ def build_client(
     module_body = ''
     imports = set()
 
-    for name, model in sorted(cluster.models.items(), key=lambda x: x[0]):
+    for model in sorted(cluster.models, key=lambda x: x['class_name']):
+        name = model['class_name']
         file_path = Path(inspect.getfile(model['cls']))
         relative_arr = file_path.relative_to(r_base_dir).as_posix().split('/')
         relative_arr[-1] = relative_arr[-1].replace('.py', '')
