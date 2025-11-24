@@ -17,7 +17,7 @@ class Cluster:
 
     def __init__(self, prefix=''):
         self.prefix = prefix
-        self.models = {}
+        self.models = []
         self.exports = {}
 
     def model(
@@ -43,19 +43,20 @@ class Cluster:
             if trigger:
                 model_data['trigger'] = trigger
 
-            self.models[name or cls.__name__] = model_data
+            self.models.append(model_data)
             return cls
 
         return decorator
 
     def index(self, *, index: str, PK: str, SK: str | None = None):
         def decorator(cls):
-            if not self.models.get(cls.__name__):
+            model = next((m for m in self.models if m['cls'] == cls), None)
+            if not model:
                 raise Exception(
                     'Model not found. Index decorator must be placed above model decorator'
                 )
 
-            self.models[cls.__name__]['indexes'][index] = {'PK': PK, 'SK': SK}
+            model['indexes'][index] = {'PK': PK, 'SK': SK}
             return cls
 
         return decorator

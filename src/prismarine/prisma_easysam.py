@@ -3,7 +3,7 @@ def build_dynamo_tables(prefix, cluster):
 
     result = {}
 
-    for _, data in cluster.models.items():
+    for data in cluster.models:
         table_name = data['table']
         short_name = table_name.replace(prefix, '')
 
