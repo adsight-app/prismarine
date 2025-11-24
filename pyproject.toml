@@ -25,12 +25,8 @@ Changelog = "https://github.com/adsight-app/prismarine/blob/main/CHANGELOG.md"
 [project.scripts]
 prismarine = "prismarine.cli:main"
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.hatch.build.targets.wheel]
-packages = ["src/prismarine"]
+[tool.uv]
+package = true
 
 [dependency-groups]
 dev = [
