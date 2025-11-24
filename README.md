@@ -175,6 +175,7 @@ The `Cluster.model` decorator accepts several arguments to customize the model:
 - **`table`** (optional): Sets a full custom table name (without prefix)
 - **`name`** (optional): Sets a custom model name (used with prefix)
 - **`trigger`** (optional): Configures a DynamoDB stream trigger for the table (when using with EasySAM)
+- **`ttl`** (optional): Configures a DynamoDB Time To Live (TTL) attribute for the table (when using with EasySAM)
 
 For example, if the `Cluster` has a prefix `TapgameExample`, by default the `Team` model will have the table name `TapgameExampleTeam`. If we set `name='Custom'`, the table name will be `TapgameExampleCustom`. And if we set `table='CustomTable'`, the table name will simply be `CustomTable`, without the prefix.
 
@@ -229,6 +230,37 @@ When EasySAM generates the CloudFormation template, it will automatically:
 - Configure the appropriate IAM permissions for stream access
 
 The trigger Lambda function will receive DynamoDB stream events with information about inserted, modified, or removed items.
+
+#### DynamoDB Time To Live (TTL)
+
+When using Prismarine with [EasySAM](https://github.com/adsight-app/easysam), you can configure DynamoDB Time To Live (TTL) directly on your models using the `ttl` parameter. This allows DynamoDB to automatically delete items after a specified expiration time.
+
+**Example:**
+
+```python
+from typing import TypedDict, NotRequired
+from prismarine.runtime import Cluster
+
+c = Cluster('PrismaTTL')
+
+@c.model(PK='Foo', SK='Bar', ttl='ExpireAt')
+class Item(TypedDict):
+    Foo: str
+    Bar: str
+    Baz: NotRequired[str]
+    ExpireAt: int  # Unix timestamp (seconds since epoch)
+```
+
+The `ttl` parameter specifies the attribute name that will store the expiration timestamp. When you create or update an item, set this attribute to a Unix timestamp (number of seconds since epoch). DynamoDB will automatically delete items within 48 hours after the TTL timestamp has passed.
+
+**Benefits:**
+- **Automatic Cleanup**: Items are automatically deleted without additional code
+- **Cost Effective**: TTL deletion is free and doesn't consume write capacity units
+- **Declarative**: Define TTL directly in your model configuration
+
+When EasySAM generates the CloudFormation template, it will automatically:
+- Enable TTL on the DynamoDB table
+- Configure the `TimeToLiveSpecification` with the specified attribute name
 
 ### `index` Decorator
 
