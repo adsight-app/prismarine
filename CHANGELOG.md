@@ -1,3 +1,9 @@
+# 1.5.0
+
+- Added optional Pydantic model generation via `--model-library pydantic` (requires `prismarine[pydantic]`)
+- Generated clients can now convert DynamoDB payloads to/from `BaseModel` instances when the option is enabled
+- Introduced unit tests that cover both TypedDict and Pydantic generation paths
+
 # 1.4.2
 
 - Fixed index decorator not recognizing models with a changed name

@@ -3,7 +3,7 @@
 Prismarine is a Pythonic ORM for DynamoDB, designed to simplify interactions with DynamoDB by providing a structured and Python-friendly interface. It leverages Python's type hinting and decorators to define models, which are then used to generate client code for database operations.
 
 Key features include:
-- **Model Definition**: Models are defined using Python's `TypedDict` and are decorated with the `Cluster.model` decorator to specify primary and sort keys.
+- **Model Definition**: Models are defined using Python's `TypedDict` (default) or, optionally, `pydantic.BaseModel` classes and are decorated with the `Cluster.model` decorator to specify primary and sort keys.
 - **Automatic Client Generation**: The `prismarine_client.py` file is auto-generated, containing classes and methods for interacting with DynamoDB tables based on the defined models.
 - **Easy Integration**: The generated client code integrates seamlessly with existing Python applications, providing methods for common database operations.
 
@@ -29,7 +29,7 @@ pip install prismarine
     - prismarine_client.py // Auto-generated
 ```
 
-Models are defined in the `models.py` file. Each model is a `TypedDict`, decorated with the `Cluster.model` decorator.
+Models are defined in the `models.py` file. Each model is a `TypedDict`, decorated with the `Cluster.model` decorator. You can also opt into Pydantic models (see [Using Pydantic Models](#using-pydantic-models)).
 
 The `Cluster` class is used to group extension models together. It also sets a prefix for the table names.
 
@@ -144,6 +144,25 @@ TeamModel.delete(foo='foo', bar='bar')
 ```
 
 You may notice that Prismarine mostly requires named arguments. This ensures that changes to field names do not cause silent code failures. For example, if the Sort Key name is changed, all usages of `get` and `update` methods will break and be highlighted by the IDE and linter. This approach also makes the code more readable.
+
+### Using Pydantic Models
+
+Prismarine can optionally generate clients that work with `pydantic.BaseModel` schemas rather than `TypedDict`.
+
+1. Install the optional dependency:
+
+```bash
+pip install "prismarine[pydantic]"
+```
+
+2. Define your models as `BaseModel` subclasses in `models.py`.
+3. Run the generator with the Pydantic model library enabled:
+
+```bash
+prismarine generate-client --model-library pydantic --base <base-path> <package-name>
+```
+
+With this flag disabled (the default `typed-dict` mode), Prismarine behaves exactly as before. The Pydantic mode keeps the same API surface but returns/accepts BaseModel instances and automatically converts data during CRUD operations.
 
 ## Advanced Usage
 
