@@ -50,7 +50,7 @@ class Cluster:
 
     def index(self, *, index: str, PK: str, SK: str | None = None):
         def decorator(cls):
-            model = next((m for m in self.models if m['cls'] == Cluster), None)
+            model = next((m for m in self.models if m['cls'] == cls), None)
             if not model:
                 raise Exception(
                     'Model not found. Index decorator must be placed above model decorator'
