@@ -4,7 +4,9 @@ import uuid
 
 import pytest
 
-from prismarine.prisma_client import build_client
+from pydantic import BaseModel, Field
+
+from prismarine.prisma_client import PYDANTIC_HELPERS, build_client
 from prismarine.prisma_common import get_cluster
 
 
@@ -111,3 +113,27 @@ class Item(TypedDict):
             extra_imports=[],
             model_library='pydantic'
         )
+
+
+def test_pydantic_update_model_respects_default_factory():
+    class FactoryModel(BaseModel):
+        Foo: str
+        tags: list[str] = Field(default_factory=list, alias='tag_list')
+
+    namespace: dict[str, object] = {}
+    exec(PYDANTIC_HELPERS, namespace)
+    build_update_model = namespace['_build_pydantic_update_model']
+
+    UpdateDTO = build_update_model(FactoryModel)
+
+    tags_field = UpdateDTO.model_fields['tags']
+    is_required = tags_field.is_required() if callable(tags_field.is_required) else tags_field.is_required
+    assert not is_required
+    assert tags_field.default_factory is not None
+    assert tags_field.alias == 'tag_list'
+
+    empty_instance = UpdateDTO()
+    assert empty_instance.model_dump(exclude_unset=True) == {}
+
+    with_tags = UpdateDTO(tag_list=['a'])
+    assert with_tags.model_dump(by_alias=True, exclude_unset=True) == {'tag_list': ['a']}

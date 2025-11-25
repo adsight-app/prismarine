@@ -47,6 +47,7 @@ PYDANTIC_HELPERS = '''\
 
 from typing import Any, Optional, get_args, get_origin
 from pydantic import BaseModel, Field, create_model
+from pydantic.fields import PydanticUndefined
 
 
 def _is_optional_type(annotation: Any):
@@ -71,10 +72,29 @@ def _build_pydantic_update_model(model_cls):
     field_definitions = {}
     for name, field in model_cls.model_fields.items():
         annotation = _make_optional(field.annotation or Any)
-        default = None if field.is_required else field.default
+        field_is_required = field.is_required() if callable(field.is_required) else field.is_required
+        alias = field.alias if field.alias and field.alias != name else None
 
-        if field.alias and field.alias != name:
-            field_definitions[name] = (annotation, Field(default=default, alias=field.alias))
+        if field_is_required:
+            default = None
+        else:
+            default = field.default if field.default is not PydanticUndefined else None
+
+        default_factory = None if field_is_required else field.default_factory
+        field_kwargs = {}
+        if alias:
+            field_kwargs['alias'] = alias
+
+        if default_factory is not None:
+            field_definitions[name] = (
+                annotation,
+                Field(default_factory=default_factory, **field_kwargs)
+            )
+        elif field_kwargs:
+            field_definitions[name] = (
+                annotation,
+                Field(default=default, **field_kwargs)
+            )
         else:
             field_definitions[name] = (annotation, default)
 
