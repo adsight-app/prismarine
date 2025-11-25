@@ -1,4 +1,4 @@
-# 1.5.0
+# 1.5.1
 
 - Added optional Pydantic model generation via `--model-library pydantic` (requires `prismarine[pydantic]`)
 - Generated clients can now convert DynamoDB payloads to/from `BaseModel` instances when the option is enabled
