@@ -222,7 +222,7 @@ def build_client(
 
     header += '# Model classes imports\n'
     for i in sorted(imports, key=lambda x: x[1]):
-        header += f'from {runtime_prefix}{i[0]} import {i[1]}\n'
+        header += f'from {runtime_prefix}{i[0]} import {i[1]}  # noqa: F401, E402\n'
 
     if extra_imports:
         header += '# Extra imports\n'
