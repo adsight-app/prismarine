@@ -119,7 +119,7 @@ def build_client(
     access_module: str | None,
     extra_imports: ExtraImport = [],
     *,
-    model_library: Literal['typed_dict', 'pydantic'] = 'typed_dict'
+    model_library: Literal['typed-dict', 'pydantic'] = 'typed-dict'
 ):
     '''
     Build a Prismarine client for a given cluster package.
@@ -132,7 +132,7 @@ def build_client(
         extra_imports: Extra imports to add to the client in format:
             [('path.to.module', 'ClassName')]
         model_library: Controls the code that is generated for data models.
-            Supported values: 'typed_dict' (default) or 'pydantic'.
+            Supported values: 'typed-dict' (default) or 'pydantic'.
     '''
     r_base_dir = base_dir.resolve()
     this_dir = Path(__file__).resolve().parent
@@ -247,7 +247,7 @@ def generate_client(
     runtime: str | None,
     access_module: str | None,
     extra_imports: ExtraImport = [],
-    model_library: Literal['typed_dict', 'pydantic'] = 'typed_dict'
+    model_library: Literal['typed-dict', 'pydantic'] = 'typed-dict'
 ):
     '''
     Generate a Prismarine client for a given cluster package.
@@ -260,7 +260,7 @@ def generate_client(
         extra_imports: Extra imports to add to the client in format:
             [('path.to.module', 'ClassName')]
         model_library: Controls the code that is generated for data models.
-            Supported values: 'typed_dict' (default) or 'pydantic'.
+            Supported values: 'typed-dict' (default) or 'pydantic'.
     '''
     cluster = get_cluster(base_dir, cluster_package)
 

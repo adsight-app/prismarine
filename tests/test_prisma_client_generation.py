@@ -46,7 +46,7 @@ class TypedItem(TypedDict):
         runtime=None,
         access_module=None,
         extra_imports=[],
-        model_library='typed_dict'
+        model_library='typed-dict'
     )
 
     assert 'class UpdateDTO(TypedDict, total=False):' in content
