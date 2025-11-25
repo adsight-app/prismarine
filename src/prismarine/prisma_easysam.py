@@ -57,4 +57,8 @@ def build_dynamo_tables(prefix, cluster):
         if 'trigger' in data:
             result[short_name]['trigger'] = data['trigger']
 
+        # Add TTL if present in model
+        if 'ttl' in data:
+            result[short_name]['ttl'] = data['ttl']
+
     return result

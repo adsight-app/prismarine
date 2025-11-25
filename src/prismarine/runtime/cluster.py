@@ -28,7 +28,8 @@ class Cluster:
         table: str | None = None,
         name: str | None = None,
         alias: str | None = None,
-        trigger: str | TriggerConfig | None = None
+        trigger: str | TriggerConfig | None = None,
+        ttl: str | None = None
     ):
         def decorator(cls):
             model_data = {
@@ -42,6 +43,10 @@ class Cluster:
             # Add trigger if specified
             if trigger:
                 model_data['trigger'] = trigger
+
+            # Add TTL if specified
+            if ttl:
+                model_data['ttl'] = ttl
 
             self.models.append(model_data)
             return cls

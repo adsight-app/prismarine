@@ -45,8 +45,15 @@ Dynamo access module to use in runtime. If not provided, DefaultDynamoAccess acc
     '--extra-imports', required=False, multiple=True,
     help='Extra imports to add to the client in format: path.to.module:ClassName'
 )
+@click.option(
+    '--model-library',
+    type=click.Choice(['typed-dict', 'pydantic'], case_sensitive=False),
+    default='typed-dict',
+    show_default=True,
+    help='Model definitions to expect inside clusters. Use "pydantic" to generate clients for BaseModel schemas (requires prismarine[pydantic]).'
+)
 @click.argument('cluster_package')
-def generate_client_cmd(base, runtime, dynamo_access_module, cluster_package, extra_imports):
+def generate_client_cmd(base, runtime, dynamo_access_module, cluster_package, extra_imports, model_library):
     base_dir = Path(base)
 
     if extra_imports:
@@ -57,7 +64,8 @@ def generate_client_cmd(base, runtime, dynamo_access_module, cluster_package, ex
         cluster_package,
         runtime=runtime,
         access_module=dynamo_access_module,
-        extra_imports=extra_imports
+        extra_imports=extra_imports,
+        model_library=model_library.replace('-', '_')
     )
 
 
