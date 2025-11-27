@@ -1,3 +1,7 @@
+# 1.5.2
+
+- Fixed generated model naming bug
+
 # 1.5.1
 
 - Added optional Pydantic model generation via `--model-library pydantic` (requires `prismarine[pydantic]`)
