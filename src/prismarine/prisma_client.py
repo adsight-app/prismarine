@@ -172,7 +172,7 @@ def build_client(
             ) from exc
 
     for model in sorted(cluster.models, key=lambda x: x['class_name']):
-        name = model['class_name']
+        name = model['name'] or model['class_name']
         file_path = Path(inspect.getfile(model['cls']))
         relative_arr = file_path.relative_to(r_base_dir).as_posix().split('/')
         relative_arr[-1] = relative_arr[-1].replace('.py', '')

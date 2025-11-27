@@ -12,7 +12,7 @@ class TriggerConfig(TypedDict):
 
 class Cluster:
     prefix: str
-    models: dict[str, dict]
+    models: list[dict]
     exports: dict[str, dict]
 
     def __init__(self, prefix=''):
@@ -37,7 +37,8 @@ class Cluster:
                 'main': {'PK': PK, 'SK': SK},
                 'table': table or self.prefix + (name or cls.__name__),
                 'indexes': {},
-                'class_name': cls.__name__
+                'class_name': cls.__name__,
+                'name': name
             }
 
             # Add trigger if specified
